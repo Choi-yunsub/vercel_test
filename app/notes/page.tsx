@@ -4,13 +4,18 @@ import { createClient } from '@/lib/supabase/client'
 import { useEffect, useState } from 'react'
 
 export default function Page() {
-  const [notes, setNotes] = useState<any[] | null>(null)
-  const supabase = createClient()
+  type Note = {
+    id: number
+    title: string
+  }
+
+  const [notes, setNotes] = useState<Note[] | null>(null)
 
   useEffect(() => {
+    const supabase = createClient()
     const getData = async () => {
       const { data } = await supabase.from('notes').select()
-      setNotes(data)
+      setNotes((data as Note[]) ?? null)
     }
     getData()
   }, [])
